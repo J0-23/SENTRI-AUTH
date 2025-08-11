@@ -40,3 +40,30 @@ export const adminMiddleware = asyncHandler(async (req, res, next) => {
   // if not admin send 403 forbidden ---- terminate request
   res.status(403).json({ message: "No admin role found" });
 });
+
+export const creatorMiddleware = asyncHandler(async (req, res, next) => {
+  if (
+    req.user &&
+    req.user.role === "creator" &&
+    req.user &&
+    req.user.role === "admin"
+  ) {
+    // if user is creator move to the next middleware / controller
+    next();
+    return;
+  }
+  // if not creator send 403 forbidden ---- terminate request
+  res.status(403).json({ message: "No creator role found" });
+});
+
+// verified middleware
+export const verifiedMiddleware = asyncHandler(async (req, res, next) => {
+  if (req.user && req.user.isVerified) {
+    // if user is verified move to the next middleware / controller
+    next();
+    return;
+  }
+
+  // if not verified send 403 forbidden ---- terminate the request
+  res.status(403).json({ message: "Please verify your email address" });
+});

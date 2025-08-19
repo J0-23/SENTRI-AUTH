@@ -1,4 +1,4 @@
-# 🔐 AuthKit
+# 🔐 Sentri-Auth
 
 A full-featured **Authentication & Authorization API** built with **Node.js**, **Express**, **MongoDB**, and **JWT**.  
 Provides **secure user management**, **role-based access control**, **email verification**, and **password reset flows** for modern apps.

@@ -89,8 +89,8 @@ DELETE /api/auth/admin/users/:id → Delete user     (admin only)
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/your-username/authkit.git
-cd authkit
++ git clone https://github.com/your-username/sentri-auth.git
++ cd sentri-auth
 
 # 2. Install dependencies
 npm install

@@ -7,6 +7,7 @@ import React, {
   Children,
 } from "react";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const UserContext = React.createContext();
 
@@ -38,6 +39,7 @@ export const UserContextProvider = ({ children }) => {
 
     try {
       const res = await axios.post(`${serverUrl}/api/v1/register`, userState);
+      console.log("User registered successfully", res.data);
       toast.success("User registered successfully");
 
       // clear the form
@@ -51,7 +53,38 @@ export const UserContextProvider = ({ children }) => {
       router.push("/login");
     } catch (error) {
       console.log("Error registering user", error);
-      toast.error(error.response.date.message);
+      toast.error(error.response.data.message);
+    }
+  };
+
+  // login user
+  const loginUser = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        `${serverUrl}/api/v1/login`,
+        {
+          email: userState.email,
+          password: userState.password,
+        },
+        {
+          withCredentials: true, // send cookies to server
+        }
+      );
+
+      toast.success("User logged in successfully");
+
+      // clear the form
+      setUserState({
+        email: "",
+        password: "",
+      });
+
+      // push user to dashboard / main page
+      router.push("/");
+    } catch (error) {
+      console.log("Error logging in user", error);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -66,7 +99,9 @@ export const UserContextProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ registerUser, userState, handlerUserInput }}>
+    <UserContext.Provider
+      value={{ registerUser, userState, handlerUserInput, loginUser }}
+    >
       {children}
     </UserContext.Provider>
   );

@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { Nova_Slim } from "next/font/google";
 
 const UserContext = React.createContext();
 
@@ -23,7 +24,7 @@ export const UserContextProvider = ({ children }) => {
     password: "",
   });
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // register user
   const registerUser = async (e) => {
@@ -98,7 +99,6 @@ export const UserContextProvider = ({ children }) => {
 
       // coarce the string to boolean
       loggedIn = !!res.data;
-      setLoading(false);
 
       if (!loggedIn) {
         router.push("/login");
@@ -127,8 +127,59 @@ export const UserContextProvider = ({ children }) => {
     }
   };
 
+  // get user details
+  const getUser = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`${serverUrl}/api/v1/user`, {
+        withCredentials: true, // send cookies to the server
+      });
+
+      setUser((prevState) => {
+        return {
+          ...prevState,
+          ...res.data,
+        };
+      });
+
+      setLoading(false);
+    } catch (error) {
+      console.log("Error getting user details", error);
+      setLoading(false);
+      toast.error(error.response.data.message);
+    }
+  };
+
+  // update user details
+  const updateUser = async (e, data) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await axios.patch(`${serverUrl}/api/v1/user`, data, {
+        withCredentials: true, // send cookies to server
+      });
+
+      // update user state
+      setUser((prevState) => {
+        return {
+          ...prevState,
+          ...res.data,
+        };
+      });
+
+      toast.success("User updated successfully");
+
+      setLoading(false);
+    } catch (error) {
+      console.log("Error updating user details", error);
+      setLoading(false);
+      toast.error(error.response.data.message);
+    }
+  };
+
   // dynamic form handler
-  const handlerUserInput = (name) => (e) => {
+  const handleUserInput = (name) => (e) => {
     const value = e.target.value;
 
     setUserState((prevState) => ({
@@ -138,7 +189,15 @@ export const UserContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    userLoginStatus();
+    const loginStatusGetUser = async () => {
+      const isLoggedIn = await userLoginStatus();
+
+      if (isLoggedIn) {
+        getUser();
+      }
+    };
+
+    loginStatusGetUser();
   }, []);
 
   return (
@@ -146,9 +205,12 @@ export const UserContextProvider = ({ children }) => {
       value={{
         registerUser,
         userState,
-        handlerUserInput,
+        handleUserInput,
         loginUser,
         logoutUser,
+        userLoginStatus,
+        user,
+        updateUser,
       }}
     >
       {children}

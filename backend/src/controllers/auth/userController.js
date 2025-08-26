@@ -230,7 +230,7 @@ export const verifyEmail = asyncHandler(async (req, res) => {
   const verificationLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
 
   // send email
-  const subject = "Email verification - Authkit";
+  const subject = "Email verification - SentriAuth";
   const send_to = req.body.send_to || user.email;
   const reply_to = "noreply@gmail.com";
   const template = "emailVerification";
@@ -334,7 +334,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   const resetLink = `${process.env.CLIENT_URL}/reset-password/${passwordResetToken}`;
 
   // send email to user
-  const subject = "Password Reset - Authkit";
+  const subject = "Password Reset - SentriAuth";
   const send_to = user.email;
   const reply_to = "noreply@noreply.com";
   const template = "forgotPassword";

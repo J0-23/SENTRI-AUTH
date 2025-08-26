@@ -7,8 +7,14 @@ import { useState } from "react";
 
 export default function Home() {
   useRedirect("/login");
-  const { logoutUser, user, handleUserInput, userState, updateUser } =
-    useUserContext();
+  const {
+    logoutUser,
+    user,
+    handleUserInput,
+    userState,
+    updateUser,
+    emailVerification,
+  } = useUserContext();
   const { name, photo, isVerified, bio } = user;
 
   // state
@@ -32,7 +38,10 @@ export default function Home() {
             className="w-[40px] h-[40px] rounded-full"
           />
           {!isVerified && (
-            <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
+            <button
+              className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              onClick={emailVerification}
+            >
               {" "}
               Verify Email{" "}
             </button>
@@ -74,7 +83,7 @@ export default function Home() {
             <button
               type="submit"
               onClick={(e) => updateUser(e, { bio: userState.bio })}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
             >
               Update Bio
             </button>

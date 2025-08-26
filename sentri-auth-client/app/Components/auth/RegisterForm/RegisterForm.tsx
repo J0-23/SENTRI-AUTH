@@ -4,7 +4,7 @@ import { useUserContext } from "@/context/userContext";
 import React from "react";
 
 const RegisterForm = () => {
-  const { registerUser, userState, handlerUserInput } = useUserContext();
+  const { registerUser, userState, handleUserInput } = useUserContext();
   const { name, email, password } = userState;
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -34,7 +34,7 @@ const RegisterForm = () => {
             type="text"
             id="name"
             value={name}
-            onChange={(e) => handlerUserInput("name")(e)}
+            onChange={(e) => handleUserInput("name")(e)}
             name="name"
             className="px-4 py-3 border-[2px] rounded-md outline-[#2ECC71] text-gray-800"
             placeholder="Sentri Auth"
@@ -48,7 +48,7 @@ const RegisterForm = () => {
             type="text"
             id="email"
             value={email}
-            onChange={(e) => handlerUserInput("email")(e)}
+            onChange={(e) => handleUserInput("email")(e)}
             name="email"
             className="px-4 py-3 border-[2px] rounded-md outline-[#2ECC71] text-gray-800"
             placeholder="example@gmail.com"
@@ -63,7 +63,7 @@ const RegisterForm = () => {
             type={showPassword ? "text" : "password"}
             id="password"
             value={password}
-            onChange={(e) => handlerUserInput("password")(e)}
+            onChange={(e) => handleUserInput("password")(e)}
             name="password"
             className="px-4 py-3 border-[2px] rounded-md outline-[#2ECC71] text-gray-800"
             placeholder="****************"

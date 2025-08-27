@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import React, {
   createContext,
   useEffect,
@@ -7,10 +8,11 @@ import React, {
   Children,
 } from "react";
 import toast from "react-hot-toast";
-import axios from "axios";
-import { Nova_Slim } from "next/font/google";
 
 const UserContext = React.createContext();
+
+// set axios to include credentials with every request
+axios.defaults.withCredentials = true;
 
 export const UserContextProvider = ({ children }) => {
   const serverUrl = "http://localhost:8000";
@@ -18,6 +20,7 @@ export const UserContextProvider = ({ children }) => {
   const router = useRouter();
 
   const [user, setUser] = useState({});
+  const [allUsers, setAllUsers] = useState([]);
   const [userState, setUserState] = useState({
     name: "",
     email: "",
@@ -223,7 +226,7 @@ export const UserContextProvider = ({ children }) => {
     }
   };
 
-  // forgot password
+  // forgot password email verification
   const forgotPasswordEmail = async (email) => {
     setLoading(true);
     try {
@@ -240,6 +243,75 @@ export const UserContextProvider = ({ children }) => {
       setLoading(false);
     } catch (error) {
       console.log("Error sending forgot password email", error);
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
+
+  // reset password
+  const resetPassword = async (token, password) => {
+    setLoading(true);
+
+    try {
+      const res = await axios.post(
+        `${serverUrl}/api/v1/reset-password/${token}`,
+        { password },
+        {
+          withCredentials: true, // send cookies to server
+        }
+      );
+
+      toast.success("Password reset successfully");
+      setLoading(false);
+
+      // push user to login page
+      router.push("/login");
+    } catch (error) {
+      console.log("Error resetting password", error);
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
+
+  // change password
+  const changePassword = async (currentPassword, newPassword) => {
+    setLoading(true);
+
+    try {
+      const res = await axios.patch(
+        `${serverUrl}/api/v1/change-password`,
+        { currentPassword, newPassword },
+        {
+          withCredentials: true, // send cookies to server
+        }
+      );
+
+      toast.success("Password changed successfully");
+      setLoading(false);
+    } catch (error) {
+      console.log("Error changing password", error);
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
+
+  // admin routes
+  const getAllUsers = async () => {
+    setLoading(true);
+
+    try {
+      const res = await axios.get(
+        `${serverUrl}/api/v1/admin/users`,
+        {},
+        {
+          withCredentials: true, // send cookies to server
+        }
+      );
+
+      setAllUsers(res.data);
+      setLoading(false);
+    } catch (error) {
+      console.log("Error getting all users", error);
       toast.error(error.response.data.message);
       setLoading(false);
     }
@@ -267,6 +339,12 @@ export const UserContextProvider = ({ children }) => {
     loginStatusGetUser();
   }, []);
 
+  useEffect(() => {
+    if (user.role === "admin") {
+      getAllUsers();
+    }
+  }, [user.role]);
+
   return (
     <UserContext.Provider
       value={{
@@ -281,6 +359,9 @@ export const UserContextProvider = ({ children }) => {
         emailVerification,
         verifyUser,
         forgotPasswordEmail,
+        resetPassword,
+        changePassword,
+        allUsers,
       }}
     >
       {children}

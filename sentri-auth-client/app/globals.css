@@ -4,3 +4,7 @@
   height: 100vh;
   background: url("../public/glass-bg.png") no-repeat center center fixed;
 }
+
+form {
+  box-shadow: 2px 3px 15px rgba(0, 0, 0, 0.08);
+}

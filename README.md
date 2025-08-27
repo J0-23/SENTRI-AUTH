@@ -36,6 +36,13 @@ Provides **secure user management**, **role-based access control**, **email veri
 - **Get all users** (creator/admin only)  
 - **Delete user** (admin only)  
 
+### Frontend Integration
+- **Built with Next.js (App Router)**
+- **React Context API** for authentication state  
+- **Profile management UI** (bio, photo updates)  
+- **Admin dashboard** for user management  
+- **Toast notifications** via `react-hot-toast`  
+- **Responsive design** with Tailwind CSS  
 ---
 
 ## Tech Stack
@@ -44,7 +51,8 @@ Provides **secure user management**, **role-based access control**, **email veri
 - **Database:** MongoDB + Mongoose  
 - **Authentication:** JWT, bcrypt  
 - **Emailing:** Nodemailer (custom templates)  
-- **Security:** HttpOnly cookies, token hashing with `crypto`  
+- **Security:** HttpOnly cookies, token hashing with `crypto`
+- **Frontend:** Next.js, React Context API, Axios, Tailwind CSS  
 
 ---
 
@@ -138,7 +146,7 @@ _Customizable in the `sendEmail` helper._
 - [ ] Add **refresh tokens** for long-lived sessions
 - [ ] Add **rate limiting** on sensitive routes
 - [ ] Add **unit & integration tests**
-- [ ] Build a **frontend client** (React / Next.js)
+- [x] Build a **frontend client** (React / Next.js)
 
 ---
 

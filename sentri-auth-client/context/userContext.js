@@ -327,6 +327,31 @@ export const UserContextProvider = ({ children }) => {
     }));
   };
 
+  // delete user
+  const deleteUser = async (id) => {
+    setLoading(true);
+
+    try {
+      const res = await axios.delete(
+        `${serverUrl}/api/v1/admin/users/${id}`,
+        {},
+        {
+          withCredentials: true, // send cookies to server
+        }
+      );
+
+      toast.success("User deleted successfully");
+      setLoading(false);
+
+      // refresh user list
+      getAllUsers();
+    } catch (error) {
+      console.log("Error deleting user", error);
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const loginStatusGetUser = async () => {
       const isLoggedIn = await userLoginStatus();
@@ -362,6 +387,7 @@ export const UserContextProvider = ({ children }) => {
         resetPassword,
         changePassword,
         allUsers,
+        deleteUser,
       }}
     >
       {children}

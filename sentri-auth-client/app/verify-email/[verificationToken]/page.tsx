@@ -1,22 +1,19 @@
 "use client";
 import { useUserContext } from "@/context/userContext";
 import React from "react";
+import { usePathname } from "next/navigation";
 
-interface Props {
-  params: {
-    verificationToken: string;
-  };
-}
-
-function page({ params }: Props) {
-  const { verificationToken } = params;
-
+export default function Page() {
   const { verifyUser } = useUserContext();
+
+  // Get verificationToken from URL
+  const pathname = usePathname(); // e.g., /verify/[verificationToken]
+  const verificationToken = pathname.split("/").pop() || "";
 
   return (
     <div className="auth-page flex flex-col justify-center items-center ">
       <div className="bg-white flex flex-col justify-center gap-[1rem] px-[5rem] py-[3rem] rounded-md">
-        <h1 className=" text-[#999] text-[2rem]">Verify Your Account</h1>
+        <h1 className="text-[#999] text-[2rem]">Verify Your Account</h1>
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded-md"
           onClick={() => {
@@ -29,5 +26,3 @@ function page({ params }: Props) {
     </div>
   );
 }
-
-export default page;

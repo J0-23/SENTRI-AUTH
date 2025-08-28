@@ -5,29 +5,41 @@ import React from "react";
 
 const LoginForm = () => {
   const { loginUser, userState, handleUserInput } = useUserContext();
-  const { name, email, password } = userState;
+  const { email, password } = userState;
   const [showPassword, setShowPassword] = React.useState(false);
 
   const togglePassword = () => setShowPassword(!showPassword);
 
   return (
-    <form className="m-[2rem] px-10 py-14 rounded-lg bg-white w-full max-w-[520px]">
-      <div className="relate z-10">
-        <h1 className="mb-2 text-center text-[1.35rem] font-medium">
-          Login to Your Account
+    <div className="min-h-screen flex items-center justify-center px-4 min-w-[432px]">
+      {" "}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          loginUser();
+        }}
+        className="mx-auto mt-20 w-full max-w-md rounded-2xl bg-white/80 p-10 shadow-xl backdrop-blur-sm transition-transform hover:scale-[1.01]"
+      >
+        <h1 className="mb-2 text-center text-[2.4rem] font-semibold text-gray-900">
+          Welcome to <br />
+          <span className="font-bold text-emerald-500">Sentri-Auth</span>
         </h1>
-        <p className="mb-8 px-[2rem] text-center text-[#999] text-[14px]">
+        <p className="mb-7 text-center text-[1.2rem] text-gray-500">
+          {" "}
           Login now. Don't have an account?{" "}
           <a
             href="/register"
-            className="font-bold text-[#2ECC71] hover:text-[#7263F3] transition-all duration-300"
+            className="font-medium text-emerald-500 hover:text-indigo-500 transition-colors"
           >
             Register Here
           </a>
         </p>
 
-        <div className="mt-[1rem] flex flex-col">
-          <label htmlFor="email" className="mb-1 text-[#999]">
+        <div className="mb-5">
+          <label
+            htmlFor="email"
+            className="mb-1 block text-[1.2rem] text-gray-500"
+          >
             Email
           </label>
           <input
@@ -36,13 +48,16 @@ const LoginForm = () => {
             value={email}
             onChange={(e) => handleUserInput("email")(e)}
             name="email"
-            className="px-4 py-3 border-[2px] rounded-md outline-[#2ECC71] text-gray-800"
             placeholder="example@gmail.com"
+            className="w-full rounded-xl border border-gray-200 bg-gray-50 px-5 py-4 text-gray-800 placeholder-gray-400 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-300"
           />
         </div>
 
-        <div className="relative mt-[1rem] flex flex-col">
-          <label htmlFor="password" className="mb-1 text-[#999]">
+        <div className="mb-5 relative">
+          <label
+            htmlFor="password"
+            className="mb-1 block text-[1.2rem] text-gray-500"
+          >
             Password
           </label>
           <input
@@ -51,40 +66,41 @@ const LoginForm = () => {
             value={password}
             onChange={(e) => handleUserInput("password")(e)}
             name="password"
-            className="px-4 py-3 border-[2px] rounded-md outline-[#2ECC71] text-gray-800"
             placeholder="****************"
+            className="w-full rounded-xl border border-gray-200 bg-gray-50 px-5 py-4 text-gray-800 placeholder-gray-400 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-300"
           />
           <button
             type="button"
-            className="absolute p-1 right-4 top-[43%] text-[22px] text-[#999] opacity-45"
+            className="absolute right-4 top-12 text-gray-400 hover:text-gray-600 transition-colors"
+            onClick={togglePassword}
           >
             {showPassword ? (
-              <i className="fas fa-eye-slash" onClick={togglePassword}></i>
+              <i className="fas fa-eye-slash"></i>
             ) : (
-              <i className="fas fa-eye" onClick={togglePassword}></i>
+              <i className="fas fa-eye"></i>
             )}
           </button>
         </div>
-        <div className="mt-4 flex justify-end">
+
+        <div className="text-right mb-7">
           <a
             href="/forgot-password"
-            className="font-bold text-[#2ECC71] text-[14px] hover:text-[#7263F3] transition-all duration-300"
+            className="text-[1.2rem] font-semibold text-emerald-500 hover:text-indigo-500 transition-colors"
           >
             Forgot password?
           </a>
         </div>
-        <div className="flex">
-          <button
-            type="submit"
-            disabled={!email || !password}
-            onClick={loginUser}
-            className="mt-[1.5rem] flex-1 px-4 py-3 font-bold bg-[#2ECC71] text-white rounded-md hover:bg-[#1abc9c] transition-colors cursor-pointer"
-          >
-            Login Now
-          </button>
-        </div>
-      </div>
-    </form>
+
+        <button
+          type="submit"
+          disabled={!email || !password}
+          onClick={loginUser}
+          className="w-full rounded-xl bg-emerald-500 py-4 text-[1.2rem] font-semibold text-white shadow-md hover:bg-emerald-600 disabled:opacity-50 transition-colors"
+        >
+          Login Now
+        </button>
+      </form>
+    </div>
   );
 };
 

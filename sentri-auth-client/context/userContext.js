@@ -71,24 +71,22 @@ export const UserContextProvider = ({ children }) => {
           email: userState.email,
           password: userState.password,
         },
-        {
-          withCredentials: true, // send cookies to server
-        }
+        { withCredentials: true }
       );
 
       toast.success("User logged in successfully");
 
-      // clear the form
-      setUserState({
-        email: "",
-        password: "",
-      });
+      // clear form
+      setUserState({ email: "", password: "" });
 
-      // push user to dashboard / main page
+      // fetch full user details after login
+      await getUser();
+
+      // push user to dashboard
       router.push("/");
     } catch (error) {
       console.log("Error logging in user", error);
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Login failed");
     }
   };
 
@@ -365,10 +363,12 @@ export const UserContextProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (user.role === "admin") {
+    if (user?.role === "admin") {
       getAllUsers();
+    } else {
+      setAllUsers([]); // clear admin-only data for non-admins
     }
-  }, [user.role]);
+  }, [user?.role]);
 
   return (
     <UserContext.Provider
